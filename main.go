@@ -8,17 +8,7 @@ func main() {
 	cleanInput("  hello  world  ")
 }
 
+// cleanInput splits the input text into words, handling all whitespace characters
 func cleanInput(text string) []string {
-	stringsSli := strings.Split(text, " ")
-	var splitString []string
-	for _, word := range stringsSli {
-		if word == " " || word == "" {
-			continue
-		}
-
-		splitString = append(splitString, word)
-	}
-
-	return splitString
-
+	return strings.Fields(text)
 }
