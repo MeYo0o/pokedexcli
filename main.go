@@ -4,16 +4,21 @@ import (
 	"bufio"
 	"fmt"
 	"os"
-	"strings"
 )
 
 func main() {
+	// config to store the pagination state [previous & next] pages.
+	var config config = config{}
+
 	// wait for user command
 	scanner := bufio.NewScanner(os.Stdin)
 	var userInput string
 
 	// intro
-	fmt.Print("Pokedex >")
+	fmt.Println("Welcome to the Pokedex!")
+
+	// prompt the first command prefix
+	fmt.Print("Pokedex > ")
 
 	// loop through each userInput after entering "return key"
 	for scanner.Scan() {
@@ -21,28 +26,22 @@ func main() {
 		// get user input
 		userInput = scanner.Text()
 
-		// get each word separated
-		textSli := cleanInput(userInput)
+		// find if it contains a command == userInput to execute
+		if command, ok := commands[userInput]; ok {
+			command.callback(&config)
+		} else {
+			fmt.Println("Unknown command")
+		}
 
 		// clear userInput
 		userInput = ""
 
-		if len(textSli) != 0 {
-			// print just the first word
-			fmt.Printf("Your command was: %s\n", strings.ToLower(textSli[0]))
-		} else {
-			fmt.Println("Invalid Input")
-		}
-
+		// prompt the next command prefix
+		fmt.Print("Pokedex > ")
 	}
 
 	if err := scanner.Err(); err != nil {
 		fmt.Println("Invalid Input: %w", err)
 	}
 
-}
-
-// cleanInput splits the input text into words, handling all whitespace characters
-func cleanInput(text string) []string {
-	return strings.Fields(text)
 }
