@@ -34,9 +34,22 @@ func main() {
 		// get user input
 		userInput = scanner.Text()
 
+		// Parse the input into command and arguments
+		words := cleanInput(userInput)
+		if len(words) == 0 {
+			fmt.Print("Pokedex > ")
+			continue
+		}
+
+		commandName := words[0]
+		args := words[1:]
+
 		// find if it contains a command == userInput to execute
-		if command, ok := commands[userInput]; ok {
-			command.callback(&config)
+		if command, ok := commands[commandName]; ok {
+			err := command.callback(&config, args...)
+			if err != nil {
+				fmt.Printf("Error: %v\n", err)
+			}
 		} else {
 			fmt.Println("Unknown command")
 		}

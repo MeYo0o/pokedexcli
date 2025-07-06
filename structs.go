@@ -5,7 +5,7 @@ import "github.com/MeYo0o/pokedexcli/internal/pokecache"
 type cliCommands struct {
 	name        string
 	description string
-	callback    func(config *config) error
+	callback    func(config *config, args ...string) error
 }
 
 type pokemonLocationsResponse struct {
@@ -23,4 +23,19 @@ type config struct {
 type pokemonLocationData struct {
 	Name string `json:"name"`
 	Url  string `json:"url"`
+}
+
+type locationAreaResponse struct {
+	ID                int                `json:"id"`
+	Name              string             `json:"name"`
+	PokemonEncounters []pokemonEncounter `json:"pokemon_encounters"`
+}
+
+type pokemonEncounter struct {
+	Pokemon pokemonData `json:"pokemon"`
+}
+
+type pokemonData struct {
+	Name string `json:"name"`
+	URL  string `json:"url"`
 }

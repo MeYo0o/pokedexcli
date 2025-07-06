@@ -21,4 +21,9 @@ var commands = map[string]cliCommands{
 		description: "display the previous 20 location maps of pokemon world",
 		callback:    commandMapb,
 	},
+	"explore": {
+		name:        "explore",
+		description: "explore the pokemon world",
+		callback:    commandExplore,
+	},
 }
