@@ -46,6 +46,28 @@ func commandMap(config *config) error {
 		url = "https://pokeapi.co/api/v2/location-area/"
 	}
 
+	// Check cache first
+	if cachedData, found := config.Cache.Get(url); found {
+		fmt.Println("Using cached data...")
+
+		var pokemonLocationsResponse pokemonLocationsResponse
+		if err := json.Unmarshal(cachedData, &pokemonLocationsResponse); err != nil {
+			return fmt.Errorf("failed to unmarshal cached response: %w", err)
+		}
+
+		// update the config
+		*config = pokemonLocationsResponse.config
+
+		// print the results map
+		for _, location := range pokemonLocationsResponse.Results {
+			fmt.Println(location.Name)
+		}
+
+		return nil
+	}
+
+	fmt.Println("Fetching data from API...")
+
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
 		return fmt.Errorf("failed to create a request: %w", err)
@@ -63,6 +85,9 @@ func commandMap(config *config) error {
 	if err != nil {
 		return fmt.Errorf("failed to read the response body: %w", err)
 	}
+
+	// Cache the response
+	config.Cache.Add(url, body)
 
 	var pokemonLocationsResponse pokemonLocationsResponse
 
@@ -91,6 +116,28 @@ func commandMapb(config *config) error {
 		return nil
 	}
 
+	// Check cache first
+	if cachedData, found := config.Cache.Get(url); found {
+		fmt.Println("Using cached data...")
+
+		var pokemonLocationsResponse pokemonLocationsResponse
+		if err := json.Unmarshal(cachedData, &pokemonLocationsResponse); err != nil {
+			return fmt.Errorf("failed to unmarshal cached response: %w", err)
+		}
+
+		// update the config
+		*config = pokemonLocationsResponse.config
+
+		// print the results map
+		for _, location := range pokemonLocationsResponse.Results {
+			fmt.Println(location.Name)
+		}
+
+		return nil
+	}
+
+	fmt.Println("Fetching data from API...")
+
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
 		return fmt.Errorf("failed to create a request: %w", err)
@@ -109,14 +156,17 @@ func commandMapb(config *config) error {
 		return fmt.Errorf("failed to read the response body: %w", err)
 	}
 
-	var pokemonLocationsResponse pokemonLocationsResponse
+	// Cache the response
+	config.Cache.Add(url, body)
 
-	// update the config
-	*config = pokemonLocationsResponse.config
+	var pokemonLocationsResponse pokemonLocationsResponse
 
 	if err := json.Unmarshal([]byte(body), &pokemonLocationsResponse); err != nil {
 		return fmt.Errorf("failed to unmarshal response: %w", err)
 	}
+
+	// update the config
+	*config = pokemonLocationsResponse.config
 
 	// print the results map
 	for _, location := range pokemonLocationsResponse.Results {

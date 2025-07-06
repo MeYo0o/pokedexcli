@@ -1,5 +1,7 @@
 package main
 
+import "github.com/MeYo0o/pokedexcli/internal/pokecache"
+
 type cliCommands struct {
 	name        string
 	description string
@@ -15,6 +17,7 @@ type pokemonLocationsResponse struct {
 type config struct {
 	Previous string `json:"previous"`
 	Next     string `json:"next"`
+	Cache    *pokecache.Cache
 }
 
 type pokemonLocationData struct {
