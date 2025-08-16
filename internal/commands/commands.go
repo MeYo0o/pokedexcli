@@ -86,11 +86,18 @@ func commandExit(params ...string) error {
 }
 
 func commandHelp(params ...string) error {
-	fmt.Println(`Welcome to the Pokedex!
-Usage:
+	fmt.Print(`Welcome to the Pokedex CLI!
+Available commands:
 
-help: Displays a help message
-exit: Exit the Pokedex`)
+  exit       - Exit the Pokedex
+  help       - List all supported commands
+  map        - get the location area map ==> next
+  mapb       - get the location area map <== previous
+  explore    - get the pokemon inside a location area
+  catch      - catch a pokemon
+  inspect    - inspect pokedex for a chosen pokemon
+  pokedex    - List all Pokemon in your pokedex
+`)
 	return nil
 }
 
